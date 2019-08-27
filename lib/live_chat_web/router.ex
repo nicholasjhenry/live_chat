@@ -17,8 +17,8 @@ defmodule LiveChatWeb.Router do
   scope "/", LiveChatWeb do
     pipe_through :browser
 
-    # get "/", PageController, :index
-    live "/", ConnectLive
+    get "/", PageController, :index
+    # live "/", ConnectLive
     get "/login/:token", PageController, :login
     get "/logout", PageController, :logout
   end

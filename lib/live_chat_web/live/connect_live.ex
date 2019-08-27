@@ -3,6 +3,10 @@ defmodule LiveChatWeb.ConnectLive do
   import Ecto.Changeset
   # Hook up the LiveView channel to the view/template
   alias LiveChatWeb.ChatView
+  alias LiveChat.MagicLinks
+
+  # LiveView does not have access to Phoenix Session, solution
+  # is to revert to standard REST
 
   # Initial state for the LiveView process
   def mount(_params, socket) do
@@ -30,13 +34,9 @@ defmodule LiveChatWeb.ConnectLive do
     |> join_changeset()
     |> Map.put(:action, :errors)
     |> case do
-      %{valid?: true, changes: %{name: name, email: email}} ->
-        assigns = [
-          name: name,
-          email: email
-        ]
-
-        {:noreply, assign(socket, assigns)}
+      %{valid?: true, changes: %{name: name, email: email} = user} ->
+        token = MagicLinks.generate_token(user)
+        {:noreply, redirect(socket, to: "/login/#{token}")}
 
       %{valid?: false} = changeset ->
         {:noreply, assign(socket, :changeset, changeset)}

@@ -7,17 +7,19 @@ defmodule LiveChatWeb.ChatLive do
   # - mount/2
   # - render/1
 
-  def mount(_params, socket) do
-    send(self(), :count)
+  def mount(%{user: user}, socket) do
+    assigns = [
+      user: user
+    ]
 
     # pass the state on the socket
-    {:ok, assign(socket, :count, 0)}
+    {:ok, assign(socket, assigns)}
   end
 
   # has to be called assigns
   def render(assigns) do
     ~L"""
-    Count: <%= @count %>
+    <div class="fullscreen">Welcome to chat, <%= @user.name %>!</div>
     """
   end
 
