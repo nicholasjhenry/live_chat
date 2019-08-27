@@ -6,7 +6,7 @@ defmodule LiveChatWeb.SidebarLive do
   def mount(%{visible: visible}, socket) do
     assigns = [
       visible: visible,
-      users: %{"user_1" => nil}
+      users: %{}
     ]
 
     socket =

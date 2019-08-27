@@ -33,6 +33,11 @@ defmodule LiveChatWeb.ChatLive do
       sidebar_open?: false
     ]
 
+    socket =
+      socket
+      |> assign(assigns)
+      |> configure_temporary_assigns([:messages])
+
     # pass the state on the socket
     {:ok, assign(socket, assigns)}
   end
@@ -42,8 +47,8 @@ defmodule LiveChatWeb.ChatLive do
     ChatView.render("chat.html", assigns)
   end
 
-  def handle_info({:messages, messages}, socket) do
-    {:noreply, assign(socket, :messages, messages)}
+  def handle_info({:new_message, message}, socket) do
+    {:noreply, assign(socket, :messages, [message])}
   end
 
   def handle_event("show_online", _attrs, socket) do
