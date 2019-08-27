@@ -19,7 +19,7 @@ defmodule LiveChatWeb.ChatLive do
       Phoenix.PubSub.subscribe(PubSub, "lobby")
 
       {:ok, _} =
-        Presence.track(self(), "lobby", user.name, %{
+        Presence.track(self(), "lobby:presence", user.name, %{
           name: user.name,
           email: user.email,
           joined_at: :os.system_time(:seconds)
@@ -44,11 +44,6 @@ defmodule LiveChatWeb.ChatLive do
 
   def handle_info({:messages, messages}, socket) do
     {:noreply, assign(socket, :messages, messages)}
-  end
-
-  # Don't do this in production
-  def handle_info(_, socket) do
-    {:noreply, socket}
   end
 
   def handle_event("show_online", _attrs, socket) do
