@@ -4,6 +4,7 @@ defmodule LiveChatWeb.ConnectLive do
   # Hook up the LiveView channel to the view/template
   alias LiveChatWeb.ChatView
 
+  # Initial state for the LiveView process
   def mount(_params, socket) do
     assigns = [
       changeset: join_changeset()
@@ -15,7 +16,7 @@ defmodule LiveChatWeb.ConnectLive do
   def render(%{name: _name} = assigns) do
     ~L"""
     <div class="fullscreen">
-      Welcome <%= @name %>!
+      Welcome, <%= @name %>!
     </div>
     """
   end
