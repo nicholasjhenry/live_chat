@@ -40,10 +40,11 @@ defmodule LiveChatWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Phoenix.LiveView, only: [
-        live_render: 2,
-        live_render: 3
-      ]
+      import Phoenix.LiveView,
+        only: [
+          live_render: 2,
+          live_render: 3
+        ]
 
       import LiveChatWeb.ErrorHelpers
       import LiveChatWeb.Gettext

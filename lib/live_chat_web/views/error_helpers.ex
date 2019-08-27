@@ -14,7 +14,6 @@ defmodule LiveChatWeb.ErrorHelpers do
     end)
   end
 
-
   @doc """
   Renders the errors for a field on a form.
   """
