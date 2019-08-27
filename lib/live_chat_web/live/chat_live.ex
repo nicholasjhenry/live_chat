@@ -30,7 +30,8 @@ defmodule LiveChatWeb.ChatLive do
       changeset: message_changeset(),
       messages: Chat.get_messages(),
       user: user,
-      sidebar_open?: false
+      sidebar_open?: false,
+      users_typing: []
     ]
 
     socket =
@@ -49,6 +50,17 @@ defmodule LiveChatWeb.ChatLive do
 
   def handle_info({:new_message, message}, socket) do
     {:noreply, assign(socket, :messages, [message])}
+  end
+
+  def handle_info({:users_typing, users}, socket) do
+    users_typing = Enum.reject(users, fn user -> user == socket.assigns.user end)
+
+    {:noreply, assign(socket, :users_typing, users_typing)}
+  end
+
+  def handle_event("update", _, socket) do
+    Chat.user_typing(socket.assigns.user)
+    {:noreply, socket}
   end
 
   def handle_event("show_online", _attrs, socket) do
