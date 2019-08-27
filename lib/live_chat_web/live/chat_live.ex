@@ -8,11 +8,19 @@ defmodule LiveChatWeb.ChatLive do
   # - render/1
   import Ecto.Changeset
   alias LiveChatWeb.ChatView
+  alias LiveChat.PubSub
+  alias LiveChat.ChatServer, as: Chat
 
+  # called twice, 1. mounted, 2. connected
   def mount(%{user: user}, socket) do
+    # No point in subscribing if not connnected
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(PubSub, "lobby")
+    end
+
     assigns = [
       changeset: message_changeset(),
-      messages: [],
+      messages: Chat.get_messages(),
       user: user
     ]
 
@@ -25,15 +33,18 @@ defmodule LiveChatWeb.ChatLive do
     ChatView.render("chat.html", assigns)
   end
 
+  def handle_info({:messages, messages}, socket) do
+    {:noreply, assign(socket, :messages, messages)}
+  end
+
   def handle_event("send", %{"chat" => attrs}, socket) do
     attrs
     |> message_changeset
     |> case do
       %{valid?: true, changes: %{message: message}} ->
-        chat_line = {socket.assigns.user, message}
+        Chat.new_message(socket.assigns.user, message)
 
         assigns = [
-          messages: socket.assigns.messages ++ [chat_line],
           changeset: message_changeset()
         ]
 
