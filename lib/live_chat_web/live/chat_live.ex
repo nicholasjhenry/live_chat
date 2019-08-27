@@ -1,6 +1,7 @@
 defmodule LiveChatWeb.ChatLive do
   use Phoenix.LiveView
   # Under the hood, this is a GenServer
+  # When state is changed, the view is automatically updated
 
   # To functions we need to implement:
   # - mount/2
