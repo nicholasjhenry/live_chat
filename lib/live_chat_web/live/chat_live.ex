@@ -22,7 +22,6 @@ defmodule LiveChatWeb.ChatLive do
 
   # handle the :count message
   def handle_info(:count, socket) do
-
     Process.send_after(self(), :count, 1_000)
 
     count = socket.assigns.count + 1
